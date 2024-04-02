@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hello WS</title>
+    <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<!--    <link href="/main.css" rel="stylesheet">-->
+<!--    <script src="https://cdn.jsdelivr.net/npm/@stomp/@stompjs@7.0.0/bundles/stomp.umd.min.js"></script>-->
+    <script src="/webjars/jquery/jquery.min.js"></script>
+    <script src="/webjars/sockjs-client/sockjs.min.js"></script>
+    <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+    <script src="/scripts.js"></script>
+</head>
+<body>
+
+    <div class="container" style="margin-top: 50px">
+        <div class="row">
+            <div class="col-md-12">
+                <form class="form-check-inline">
+                    <div class="form-group">
+                        <label for="message">Common message to everyone</label>
+                        <input type="text" id="message" class="form-control" placeholder="Enter message here...">
+                    </div>
+                    <button id="send" class="btn btn-dark" type="button">Send</button>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <form class="form-check-inline">
+                    <div class="form-group">
+                        <label for="private-id">Id user to send</label>
+                        <input type="text" id="private-id" class="form-control" placeholder="Enter id here...">
+                        <label for="private-message">Private message</label>
+                        <input type="text" id="private-message" class="form-control" placeholder="Enter private message here...">
+                    </div>
+                    <button id="send-private" class="btn btn-dark" type="button">Send private</button>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table id="message-history" class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Messages</th>
+                    </tr>
+                    </thead>
+                    <tbody id="messages"></tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
