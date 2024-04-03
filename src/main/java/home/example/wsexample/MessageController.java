@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.*;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.security.Principal;
 
@@ -13,9 +12,10 @@ import java.security.Principal;
 public class MessageController {
 
     private final MessageService messageService;
-    @MessageMapping("/message")
-    @SendTo("/commonTopic/messages")
-    public ResponseMessage getMessage(@Payload Message message, Principal principal){
+    @MessageMapping("/message/{sessionId}")
+    @SendTo("/commonTopic/{sessionId}/messages")
+    public ResponseMessage getMessage(@Payload Message message, Principal principal, @DestinationVariable String sessionId){
+        System.out.println("Получено сообщения от сессии #" + sessionId);
         return messageService.createCommonMessage(message, principal);
     }
 
