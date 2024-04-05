@@ -20,7 +20,7 @@ $(document).ready(function () {
     });
 
     $("#send-private").click(function () {
-        sendPrivateMessage();
+        sendPrivateMessage(sessionId);
     });
 });
 
@@ -41,13 +41,19 @@ function connect(sessionId) {
 
         // подписка на личные сообщения для себя
         stompClient.subscribe(
-            topicPrivate + idCurrentUser + '/private-messages', function (message) {
+            topicPrivate + sessionId + '/private-messages', function (message) {
                 showMessage2(JSON.parse(message.body).content);
             });
 
         stompClient.subscribe(
-            topicPrivate + idCurrentUser + '/errors', function (message) {
+            topicPrivate + '/errors', function (message) {
                 console.log("Error " + message.body);
+            });
+
+        // эта подписка нужна чтобы отправителю вернулся ответ после отправки личных сообщений
+        stompClient.subscribe(
+            '/privateTopic/' + sessionId + '/private-messages', function (message) {
+                showMessage2(JSON.parse(message.body).content);
             });
 
     }, function (error) {
@@ -61,16 +67,11 @@ function sendMessage(sessionId) {
     stompClient.send(app + sessionId, {}, JSON.stringify({'name': $("#message").val()}));
 }
 
-function sendPrivateMessage() {
+function sendPrivateMessage(sessionId) {
     let idToUser = $("#private-id").val();  // в этом примере Id получателя берем с фронта, с input поля
     console.log("Sent private message to " + idToUser);
-    //добавить подписку, если нужно, чтобы отправителю вернулся ответ на фронт (что сообщение отправлено успешно)
-    stompClient.subscribe(
-        topicPrivate + idToUser + '/private-messages', function (message) {
-            showMessage2(JSON.parse(message.body).content);
-        });
     // отправка личного сообщения. Здесь объект содержит только поле 'name'
-    stompClient.send(appPrivate + idToUser, {}, JSON.stringify({'name': $("#private-message").val()}));
+    stompClient.send(appPrivate + sessionId +'/'+ idToUser, {}, JSON.stringify({'name': $("#private-message").val()}));
 }
 
 // простой вывод сообщений в таблицу
